@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { createUser } from '../services/userAPI';
 import Loading from './Loading';
+// import Search from './Search';
 
 class Login extends Component {
   constructor() {
@@ -8,12 +9,21 @@ class Login extends Component {
     this.state = {
       buttonDisabled: true,
       nameChange: '',
+      loading: false,
+      redirect: false,
     };
   }
 
   handleSubmit = async () => {
-    const { nameChange } = this.state;
-    await createUser({ name: nameChange });
+    const { nameChange, redirect } = this.state;
+    this.setState({ loading: true });
+    await createUser({
+      name: nameChange,
+      redirect: true,
+    });
+    if (redirect) {
+      return <Login to="/search" />;
+    }
   }
 
   handleChange = ({ target }) => {
@@ -30,10 +40,11 @@ class Login extends Component {
   }
 
   render() {
-    const { buttonDisabled } = this.state;
+    const { buttonDisabled, loading } = this.state;
     return (
       <div data-testid="page-login">
         <form action="">
+          {loading && <Loading />}
           <input
             name="nameChange"
             onChange={ this.handleChange }
