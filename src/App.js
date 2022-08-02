@@ -15,7 +15,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={ Login } />
           <Route exact path="/search" component={ Search } />
-          <Route exact path="/album/:id" component={ Album } />
+          <Route path="/album/:id" component={ Album } />
           <Route exact path="/favorites" component={ Favorites } />
           <Route exact path="/profile" component={ Profile } />
           <Route exact path="/profile/edit" component={ ProfileEdit } />
