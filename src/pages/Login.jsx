@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
 import Loading from './Loading';
-// import Search from './Search';
 
 class Login extends Component {
   constructor() {
@@ -10,20 +10,17 @@ class Login extends Component {
       buttonDisabled: true,
       nameChange: '',
       loading: false,
-      redirect: false,
     };
   }
 
   handleSubmit = async () => {
-    const { nameChange, redirect } = this.state;
+    const { history } = this.props;
+    const { nameChange } = this.state;
     this.setState({ loading: true });
     await createUser({
       name: nameChange,
-      redirect: true,
     });
-    if (redirect) {
-      return <Login to="/search" />;
-    }
+    history.push('/search');
   }
 
   handleChange = ({ target }) => {
@@ -64,5 +61,14 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+};
+Login.defaultProps = {
+  history: 'history',
+};
 
 export default Login;
