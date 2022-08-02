@@ -9,13 +9,6 @@ import ProfileEdit from './pages/ProfileEdit';
 import NotFound from './pages/NotFound';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-
-    };
-  }
-
   render() {
     return (
       <BrowserRouter>
