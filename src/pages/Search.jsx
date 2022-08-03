@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import searchAlbumsAPI from '../services/searchAlbumsAPI';
 
 class Search extends Component {
   constructor() {
@@ -7,6 +9,8 @@ class Search extends Component {
     this.state = {
       nameChange: '',
       buttonDisabled: true,
+      musicList: [],
+      pesquisa: false,
     };
   }
 
@@ -23,25 +27,60 @@ class Search extends Component {
     });
   }
 
+  handleClear = async ({ target }) => {
+    const idValue = document.getElementsByClassName(target.name);
+    console.log(idValue[0].value);
+    const albuns = await searchAlbumsAPI(idValue[0].value);
+    idValue[0].value = '';
+    const musicMap = albuns.map((e) => e.artistName);
+    console.log(musicMap);
+    console.log(albuns);
+    this.setState({ musicList: albuns, pesquisa: true });
+  }
+
   render() {
-    const { buttonDisabled } = this.state;
+    const { buttonDisabled, musicList, pesquisa, nameChange } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
         <form action="">
-          <input
-            onChange={ this.handleChange }
-            name="nameChange"
-            type="text"
-            data-testid="search-artist-input"
-          />
-          <button
-            disabled={ buttonDisabled }
-            type="button"
-            data-testid="search-artist-button"
-          >
-            Pesquisar
-          </button>
+          <div>
+            <input
+              className="nameValue"
+              onChange={ this.handleChange }
+              name="nameChange"
+              type="text"
+              data-testid="search-artist-input"
+            />
+            <button
+              name="nameValue"
+              onClick={ this.handleClear }
+              disabled={ buttonDisabled }
+              type="button"
+              data-testid="search-artist-button"
+            >
+              Pesquisar
+            </button>
+            <div>
+              { pesquisa && (
+                <p>
+                  {`Resultado de álbuns de: ${nameChange}`}
+                </p>)}
+              { musicList.length === 0 && <p>Nenhum álbum foi encontrado</p> }
+              { musicList.map((e) => (
+                <div
+                  key={ e.id }
+                >
+                  <Link
+                    data-testid={ `link-to-album-${e.collectionId}` }
+                    to={ `/album/${e.collectionId}` }
+                  >
+                    Album:
+                  </Link>
+                  { `Artist: ${e.artistName} - Album: ${e.collectionName}` }
+                </div>))}
+            </div>
+          </div>
         </form>
       </div>
     );

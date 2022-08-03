@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
 import Loading from './Loading';
-import Header from '../components/Header';
 
 class Login extends Component {
   constructor() {
@@ -42,7 +41,6 @@ class Login extends Component {
     return (
       <div data-testid="page-login">
         <form action="">
-          <Header />
           {loading && <Loading />}
           <input
             name="nameChange"
