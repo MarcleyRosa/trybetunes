@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Loading from '../pages/Loading';
 
 export default class MusicCard extends Component {
   state = {
     loading: false,
     favoritMus: [],
-    falseTrue: undefined,
     trueFalse: true,
     favoriteSong: [],
   }
@@ -28,12 +27,10 @@ export default class MusicCard extends Component {
 
   handleChange = async () => {
     this.setState({ loading: true });
-    await this.getHandleMusic();
     const { objMusic } = this.props;
-    await addSong(objMusic);
-    this.setState(() => ({ favoritMus: objMusic,
-      loading: false }));
-    this.setState((prevState) => ({ falseTrue: !prevState.falseTrue }));
+    await removeSong(objMusic);
+    this.setState(() => ({ loading: false }));
+    this.setState((prevState) => ({ trueFalse: !prevState.trueFalse }));
   }
 
   getHandleMusic = async () => {
@@ -41,7 +38,7 @@ export default class MusicCard extends Component {
   }
 
   render() {
-    const { loading, falseTrue, trueFalse } = this.state;
+    const { loading, trueFalse } = this.state;
     const { previewUrl, trackName, trackId } = this.props;
 
     return (
@@ -62,7 +59,7 @@ export default class MusicCard extends Component {
               id={ trackId }
               data-testid={ `checkbox-music-${trackId}` }
               type="checkbox"
-              checked={ falseTrue || trueFalse }
+              checked={ trueFalse }
             />
             Favorita
           </label>
