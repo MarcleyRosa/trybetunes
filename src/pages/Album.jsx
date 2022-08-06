@@ -25,20 +25,21 @@ class Album extends Component {
 
   render() {
     const { musicas, loading, artist } = this.state;
-    console.log(musicas);
+    console.log('todas mus', musicas);
     return (
       <div data-testid="page-album">
         <Header />
         { loading ? <Loading /> : (
           <div>
             <p data-testid="album-name">{ artist.collectionName }</p>
-            <p data-testid="artist-name">{artist.artistName}</p>
+            <p data-testid="artist-name">{ artist.artistName }</p>
             <img src={ artist.artworkUrl100 } alt="Artist" />
-            { musicas.filter((music) => music.trackId).map((musica, i) => (
-              <MusicCard
-                key={ i }
+            { musicas.map((musica, index) => (
+              index >= 1 && <MusicCard
+                key={ index }
                 { ...musica }
-                objMusic={ musicas[i] }
+                allMusics={ musicas }
+                objMusic={ musicas[index] }
               />))}
           </div>)}
       </div>

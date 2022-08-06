@@ -67,17 +67,17 @@ class Search extends Component {
                   {`Resultado de álbuns de: ${nameChange}`}
                 </p>)}
               { musicList.length === 0 && <p>Nenhum álbum foi encontrado</p> }
-              { musicList.map((e) => (
+              { musicList.map((music, index) => (
                 <div
-                  key={ e.id }
+                  key={ index }
                 >
                   <Link
-                    data-testid={ `link-to-album-${e.collectionId}` }
-                    to={ `/album/${e.collectionId}` }
+                    data-testid={ `link-to-album-${music.collectionId}` }
+                    to={ `/album/${music.collectionId}` }
                   >
                     Album:
                   </Link>
-                  { `Artist: ${e.artistName} - Album: ${e.collectionName}` }
+                  { `Artist: ${music.artistName} - Album: ${music.collectionName}` }
                 </div>))}
             </div>
           </div>

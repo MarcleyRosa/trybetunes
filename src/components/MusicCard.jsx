@@ -1,24 +1,47 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from '../pages/Loading';
 
 export default class MusicCard extends Component {
   state = {
     loading: false,
+    favoritMus: [],
+    falseTrue: undefined,
+    trueFalse: true,
+    favoriteSong: [],
+  }
+
+  async componentDidMount() {
+    await this.getHandleMusic();
+    const { objMusic } = this.props;
+    await addSong(objMusic);
+    this.setState(() => ({ favoritMus: objMusic,
+      loading: false }));
+    const { favoritMus, favoriteSong } = this.state;
+    console.log('favrot', favoritMus, 'seg fav', favoriteSong);
+    const checkedTrueOrFalse = favoriteSong
+      .some((song) => song.trackId === favoritMus.trackId);
+    console.log('checked true', checkedTrueOrFalse);
+    this.setState(() => ({ trueFalse: checkedTrueOrFalse }));
   }
 
   handleChange = async () => {
     this.setState({ loading: true });
+    await this.getHandleMusic();
     const { objMusic } = this.props;
-    console.log('entrei', objMusic);
-    const favorit = await addSong(objMusic);
-    this.setState({ loading: false });
-    return favorit;
+    await addSong(objMusic);
+    this.setState(() => ({ favoritMus: objMusic,
+      loading: false }));
+    this.setState((prevState) => ({ falseTrue: !prevState.falseTrue }));
+  }
+
+  getHandleMusic = async () => {
+    this.setState({ favoriteSong: await getFavoriteSongs() });
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, falseTrue, trueFalse } = this.state;
     const { previewUrl, trackName, trackId } = this.props;
 
     return (
@@ -39,7 +62,7 @@ export default class MusicCard extends Component {
               id={ trackId }
               data-testid={ `checkbox-music-${trackId}` }
               type="checkbox"
-              // checked={}
+              checked={ falseTrue || trueFalse }
             />
             Favorita
           </label>
@@ -53,6 +76,6 @@ export default class MusicCard extends Component {
 MusicCard.propTypes = {
   previewUrl: PropTypes.string.isRequired,
   trackName: PropTypes.string.isRequired,
-  trackId: PropTypes.string.isRequired,
-  objMusic: PropTypes.shape.isRequired,
+  trackId: PropTypes.number.isRequired,
+  objMusic: PropTypes.objectOf.isRequired,
 };
