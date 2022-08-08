@@ -6,29 +6,30 @@ import Loading from '../pages/Loading';
 export default class MusicCard extends Component {
   state = {
     loading: false,
-    favoritMus: [],
+    favoritMus: {},
     trueFalse: true,
     favoriteSong: [],
   }
 
   async componentDidMount() {
     await this.getHandleMusic();
-    const { objMusic } = this.props;
-    await addSong(objMusic);
+    const { objMusic = {} } = this.props;
+    console.log(objMusic);
     this.setState(() => ({ favoritMus: objMusic,
       loading: false }));
     const { favoritMus, favoriteSong } = this.state;
-    console.log('favrot', favoritMus, 'seg fav', favoriteSong);
     const checkedTrueOrFalse = favoriteSong
       .some((song) => song.trackId === favoritMus.trackId);
-    console.log('checked true', checkedTrueOrFalse);
     this.setState(() => ({ trueFalse: checkedTrueOrFalse }));
   }
 
   handleChange = async () => {
+    this.setState({ favoriteSong: await getFavoriteSongs() });
     this.setState({ loading: true });
     const { objMusic } = this.props;
-    await removeSong(objMusic);
+    const { trueFalse } = this.state;
+    if (!trueFalse) await addSong(objMusic);
+    if (trueFalse) await removeSong(objMusic);
     this.setState(() => ({ loading: false }));
     this.setState((prevState) => ({ trueFalse: !prevState.trueFalse }));
   }
@@ -39,10 +40,11 @@ export default class MusicCard extends Component {
 
   render() {
     const { loading, trueFalse } = this.state;
-    const { previewUrl, trackName, trackId } = this.props;
+    const { previewUrl, trackName, trackId,
+      music, onChange = (ev) => this.handleChange(ev, music) } = this.props;
 
     return (
-      <div>
+      <div id="remove-music" className={ trackId }>
 
         {loading && <Loading />}
         <p>{ trackName }</p>
@@ -55,7 +57,7 @@ export default class MusicCard extends Component {
         <div>
           <label htmlFor={ trackId }>
             <input
-              onChange={ this.handleChange }
+              onChange={ onChange }
               id={ trackId }
               data-testid={ `checkbox-music-${trackId}` }
               type="checkbox"
@@ -75,4 +77,6 @@ MusicCard.propTypes = {
   trackName: PropTypes.string.isRequired,
   trackId: PropTypes.number.isRequired,
   objMusic: PropTypes.objectOf.isRequired,
+  music: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };

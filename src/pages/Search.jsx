@@ -32,9 +32,6 @@ class Search extends Component {
     console.log(idValue[0].value);
     const albuns = await searchAlbumsAPI(idValue[0].value);
     idValue[0].value = '';
-    const musicMap = albuns.map((e) => e.artistName);
-    console.log(musicMap);
-    console.log(albuns);
     this.setState({ musicList: albuns, pesquisa: true });
   }
 

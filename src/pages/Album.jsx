@@ -25,7 +25,6 @@ class Album extends Component {
 
   render() {
     const { musicas, loading, artist } = this.state;
-    console.log('todas mus', musicas);
     return (
       <div data-testid="page-album">
         <Header />
@@ -34,10 +33,10 @@ class Album extends Component {
             <p data-testid="album-name">{ artist.collectionName }</p>
             <p data-testid="artist-name">{ artist.artistName }</p>
             <img src={ artist.artworkUrl100 } alt="Artist" />
-            { musicas.map((musica, index) => (
+            { musicas.map((music, index) => (
               index >= 1 && <MusicCard
                 key={ index }
-                { ...musica }
+                { ...music }
                 allMusics={ musicas }
                 objMusic={ musicas[index] }
               />))}
