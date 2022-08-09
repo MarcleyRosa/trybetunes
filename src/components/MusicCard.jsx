@@ -24,13 +24,12 @@ export default class MusicCard extends Component {
   }
 
   handleChange = async () => {
-    this.setState({ favoriteSong: await getFavoriteSongs() });
     this.setState({ loading: true });
     const { objMusic } = this.props;
     const { trueFalse } = this.state;
-    if (!trueFalse) await addSong(objMusic);
-    if (trueFalse) await removeSong(objMusic);
-    this.setState(() => ({ loading: false }));
+    if (trueFalse === false) await addSong(objMusic);
+    if (trueFalse === true) await removeSong(objMusic);
+    this.setState({ favoriteSong: await getFavoriteSongs(), loading: false });
     this.setState((prevState) => ({ trueFalse: !prevState.trueFalse }));
   }
 
