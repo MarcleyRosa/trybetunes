@@ -6,7 +6,7 @@ import Loading from './Loading';
 
 class Profile extends Component {
   state = {
-    loading: false,
+    loading: true,
     user: '',
   }
 
@@ -28,9 +28,9 @@ class Profile extends Component {
         { loading ? <Loading /> : (
           <section>
             <img data-testid="profile-image" src={ user.image } alt="Foto do Perfil" />
-            <p>{ user.name }</p>
-            <p>{ user.email }</p>
-            <p>{ user.description }</p>
+            <h1>{ user.name }</h1>
+            <h2>{ user.email }</h2>
+            <h3>{ user.description }</h3>
             <Link to="/profile/edit">Editar perfil</Link>
           </section>)}
       </div>
