@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
 import Loading from './Loading';
+import '../index.css';
+import trybetunes from '../imgs/imageTrybeTunes.png';
 
 class Login extends Component {
   constructor() {
@@ -13,7 +15,8 @@ class Login extends Component {
     };
   }
 
-  handleSubmit = async () => {
+  handleSubmit = async (event) => {
+    event.preventDefault();
     const { history } = this.props;
     const { nameChange } = this.state;
     this.setState({ loading: true });
@@ -39,25 +42,35 @@ class Login extends Component {
   render() {
     const { buttonDisabled, loading } = this.state;
     return (
-      <div data-testid="page-login">
-        <form action="">
-          {loading && <Loading />}
-          <input
-            name="nameChange"
-            onChange={ this.handleChange }
-            data-testid="login-name-input"
-            type="text"
-          />
-          <button
-            disabled={ buttonDisabled }
-            onClick={ this.handleSubmit }
-            data-testid="login-submit-button"
-            type="submit"
-          >
-            Entrar
-          </button>
-        </form>
-      </div>
+      <main data-testid="page-login">
+        <header className="header-login">
+          <img src={ trybetunes } alt="" />
+          <h1 className="title-header">Login</h1>
+          <div className="user">Usuário</div>
+        </header>
+        {loading ? <Loading /> : (
+          <form action="">
+            <div className="login-form">
+              <input
+                name="nameChange"
+                onChange={ this.handleChange }
+                data-testid="login-name-input"
+                type="text"
+                className="input-login"
+              />
+              <button
+                disabled={ buttonDisabled }
+                onClick={ this.handleSubmit }
+                data-testid="login-submit-button"
+                type="submit"
+                className={ buttonDisabled ? 'disabled' : 'button' }
+              >
+                Entrar
+              </button>
+            </div>
+          </form>
+        )}
+      </main>
     );
   }
 }

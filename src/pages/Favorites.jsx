@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
 import { getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
+import trybetunes from '../imgs/imageTrybeTunes.png';
 
 class Favorites extends Component {
   state = {
@@ -26,24 +27,15 @@ class Favorites extends Component {
      this.setState({ loading: false, musicListFavorite: listFavorite });
    }
 
-   // componentWillUnmount() {
-   //   this.handletarget();
-   // }
-
-   // handletarget = () => {
-   //   const { musicListFavorite } = this.state;
-   //   console.log('music state', musicListFavorite);
-   //   const requestId = document.getElementById('remove-music');
-   //   const removes = musicListFavorite
-   //     .filter((music) => music.trackId === Number(requestId.className));
-   //   console.log('remio', removes);
-   //   this.setState(() => ({ removeMusics: removes }));
-   // }
-
    render() {
      const { loading, musicListFavorite } = this.state;
      return (
        <div data-testid="page-favorites">
+         <header className="header-login">
+           <img src={ trybetunes } alt="" />
+           <h1 className="title-header">Musicas Favoritas</h1>
+           <div className="user">Usuário</div>
+         </header>
          <Header />
          {loading ? <Loading /> : (
            <div>

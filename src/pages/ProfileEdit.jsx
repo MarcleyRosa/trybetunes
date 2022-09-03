@@ -58,11 +58,9 @@ class ProfileEdit extends Component {
       image,
       description,
     };
-    console.log('test');
     this.setState({ loading: true });
     await updateUser(objUser);
     history.push('/profile');
-    console.log('cheguei');
   }
 
   render() {

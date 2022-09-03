@@ -1,33 +1,36 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Loading from '../pages/Loading';
-import { getUser } from '../services/userAPI';
 
 export default class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      nameImput: <Loading />,
-    };
-  }
-
-  componentDidMount() {
-    this.handleName();
-  }
-
-  handleName = async () => {
-    const nameChanges = await getUser();
-    this.setState({ nameImput: nameChanges.name });
-  };
-
   render() {
-    const { nameImput } = this.state;
     return (
-      <header data-testid="header-component">
-        <p data-testid="header-user-name">{ nameImput }</p>
-        <Link to="/search" data-testid="link-to-search">Voltar para aba de pesquisa</Link>
-        <Link to="/favorites" data-testid="link-to-favorites">Musicas favoritas</Link>
-        <Link to="/profile" data-testid="link-to-profile">Perfil</Link>
+      <header className="header-component" data-testid="header-component">
+
+        <Link
+          className="links"
+          to="/search"
+          data-testid="link-to-search"
+        >
+          <h3>Voltar para aba de pesquisa</h3>
+
+        </Link>
+
+        <Link
+          className="links"
+          to="/favorites"
+          data-testid="link-to-favorites"
+        >
+          <h3>Musicas favoritas</h3>
+
+        </Link>
+        <Link
+          className="links"
+          to="/profile"
+          data-testid="link-to-profile"
+        >
+          <h3>Perfil</h3>
+
+        </Link>
       </header>
     );
   }

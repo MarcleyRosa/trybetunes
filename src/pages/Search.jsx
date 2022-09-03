@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
+import trybetunes from '../imgs/imageTrybeTunes.png';
+import { getUser } from '../services/userAPI';
 
 class Search extends Component {
   constructor() {
@@ -11,8 +13,18 @@ class Search extends Component {
       buttonDisabled: true,
       musicList: [],
       pesquisa: false,
+      nameImput: '',
     };
   }
+
+  componentDidMount() {
+    this.handleName();
+  }
+
+  handleName = async () => {
+    const nameChanges = await getUser();
+    this.setState({ nameImput: nameChanges.name });
+  };
 
   handleChange = ({ target }) => {
     const { name, value } = target;
@@ -29,25 +41,30 @@ class Search extends Component {
 
   handleClear = async ({ target }) => {
     const idValue = document.getElementsByClassName(target.name);
-    console.log(idValue[0].value);
     const albuns = await searchAlbumsAPI(idValue[0].value);
     idValue[0].value = '';
     this.setState({ musicList: albuns, pesquisa: true });
   }
 
   render() {
-    const { buttonDisabled, musicList, pesquisa, nameChange } = this.state;
+    const { buttonDisabled, musicList, pesquisa, nameChange, nameImput } = this.state;
     return (
       <div data-testid="page-search">
+        <header className="header-login">
+          <img src={ trybetunes } alt="" />
+          <h1 className="title-header">Musicas</h1>
+          <div className="user">{`Usuário ${nameImput}`}</div>
+        </header>
         <Header />
         <form action="">
-          <div>
+          <div className="search-button">
             <input
               className="nameValue"
               onChange={ this.handleChange }
               name="nameChange"
               type="text"
               data-testid="search-artist-input"
+              placeholder="Search.."
             />
             <button
               name="nameValue"
@@ -55,14 +72,15 @@ class Search extends Component {
               disabled={ buttonDisabled }
               type="button"
               data-testid="search-artist-button"
+              className={ buttonDisabled ? 'search-disabled' : 'search' }
             >
               Pesquisar
             </button>
             <div>
               { pesquisa && (
-                <p>
+                <h3>
                   {`Resultado de álbuns de: ${nameChange}`}
-                </p>)}
+                </h3>)}
               { musicList.length === 0 && <p>Nenhum álbum foi encontrado</p> }
               { musicList.map((music, index) => (
                 <div

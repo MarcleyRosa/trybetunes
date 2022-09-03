@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { getUser } from '../services/userAPI';
 import Loading from './Loading';
+import trybetunes from '../imgs/imageTrybeTunes.png';
 
 class Profile extends Component {
   state = {
@@ -24,6 +25,11 @@ class Profile extends Component {
     const { user, loading } = this.state;
     return (
       <div data-testid="page-profile">
+        <header className="header-login">
+          <img src={ trybetunes } alt="" />
+          <h1 className="title-header">Perfil</h1>
+          <div className="user">Usuário</div>
+        </header>
         <Header />
         { loading ? <Loading /> : (
           <section>
